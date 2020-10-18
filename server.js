@@ -3,6 +3,7 @@ const { animals } = require('./data/animals');
 const { query } = require('express');
 const express = require('express');
 
+const PORT = process.env.PORT || 3001;
 const app = express();
 
 const animals = require("./data/animals.json")
@@ -46,7 +47,12 @@ function filterByQuery(query, animalsArray) {
     return filteredResults;
 }
 
-// // route the client to fetch from
+function findById(id, animalsArray) {
+    const result = animalsArray.filter(animal => animal.id === id)[0];
+    return result;
+}
+
+// route the client to fetch from
 app.get('/api/animals', (req, res) => {
     let results = animals;
     if (req.query){
@@ -55,10 +61,13 @@ app.get('/api/animals', (req, res) => {
     res.json(results)
 });
 
-app.listen(3001, () => {
-    console.log(`API server now port 3001!`);
+//  GET route, param object to be defined in the route path <route>/:<parameterName>   
+app.get('/api/animals/:id', (req, res) => {
+    const result = findById(req.params.id, animals);
+        res.json(result);
 });
 
-
-
+app.listen(PORT, () => {
+    console.log(`API server now on port ${PORT}!`);
+  });
 
