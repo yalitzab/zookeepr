@@ -7,6 +7,8 @@ const { animals } = require('./data/animals');
 const PORT = process.env.PORT || 3001;
 const app = express();
 
+// instruct the server to make the files static resources
+app.use(express.static('public'));
 // parse incoming string or array data
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
@@ -99,6 +101,22 @@ app.get('/api/animals/:id', (req, res) => {
     } else {
         res.send(404);
     }
+});
+
+// Routes need to be in order
+// route to index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+// route animals.html
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+// route zookeepers
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
 });
 
 // POST request
